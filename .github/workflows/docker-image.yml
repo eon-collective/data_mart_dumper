@@ -20,6 +20,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Check python version
+      run: python --version
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag pg_dumper:ci_build-$(git log --pretty=format:'%h' -n 1)
     - name: List the available Docker images
