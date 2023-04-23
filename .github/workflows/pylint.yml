@@ -22,7 +22,7 @@ jobs:
         python src/pg_dumper.py --version
     - name: Test with python call for Help
       run: |
-        python src/pg_dumper.py --help
+        python src/pg_dumper.py --help  
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
