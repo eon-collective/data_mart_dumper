@@ -15,8 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag pg_dumper:ci_build
+      run: docker build . --file Dockerfile --tag pg_dumper:ci_build-$(git log --pretty=format:'%h' -n 1)
     - name: List the available Docker images
       run: docker images
     - name: run the Docker image - show help
-      run: docker run pg_dumper:ci_build --help
+      run: docker run pg_dumper:ci_build-$(git log --pretty=format:'%h' -n 1) --help
