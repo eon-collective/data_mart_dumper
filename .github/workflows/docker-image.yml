@@ -18,5 +18,5 @@ jobs:
       run: docker build . --file Dockerfile --tag pg_dumper:ci_build
     - name: List the available Docker images
       run: docker images
-    - name: run the Docker image
+    - name: run the Docker image - show help
       run: docker run pg_dumper:ci_build --help

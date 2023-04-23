@@ -14,6 +14,12 @@
 
 </p>
 
+<p align="center">
+
+[![Docker Image CI](https://github.com/eon-collective/data_mart_dumper/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/docker-image.yml)
+
+</p>
+
 ## Building this project
 ### Docker image
 1. From project root,
