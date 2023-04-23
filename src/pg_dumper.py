@@ -15,8 +15,8 @@ Future Updates:
 
 import re
 import os
-import regex
 import argparse
+import regex
 
 # WRITE_LOCATION = os.getcwd()
 # TXT_FILE_LOCATION = ''
@@ -123,15 +123,10 @@ def quote_swap(string: str, swap_out='double') -> str:
     """
     if swap_out == 'double':
         return string.replace('"', "'")
-    elif swap_out == 'single':
+    if swap_out == 'single':
         return string.replace("'", '"')
 
 if __name__ == '__main__':
-    """ main function - will parse arguments and call the process_pg_dump_file function
-
-    Keyword arguments:
-    args - command line arguments
-    """
     parser = argparse.ArgumentParser(
                     prog='Data Mart Dumper',
                     description='''This program takes in a pg_dump generated DDLs and generates crt_ models that can be placed
@@ -150,4 +145,4 @@ if __name__ == '__main__':
     print("Provided pg_dump file: " + args.input_file_name)
     print("Provided output location: " + args.output_location)
     ## call the process_pg_dump_file with input and put locations from args
-    process_pg_dump_file(args.input_file_name, args.output_location) 
+    process_pg_dump_file(args.input_file_name, args.output_location)
