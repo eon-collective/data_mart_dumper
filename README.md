@@ -4,13 +4,13 @@
 
 <p align="center">
 
-[![Pylint](https://github.com/eon-collective/data_mart_dumper/actions/workflows/pylint.yml/badge.svg)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/pylint.yml)
+[![Pylint](https://github.com/eon-collective/data_mart_dumper/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/pylint.yml)
 
 </p>
 
 <p align="center">
 
-[![Python application](https://github.com/eon-collective/data_mart_dumper/actions/workflows/python-app.yml/badge.svg)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/python-app.yml)
+[![Python application](https://github.com/eon-collective/data_mart_dumper/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/python-app.yml)
 
 </p>
 
