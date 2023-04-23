@@ -1,10 +1,13 @@
-""" Data Mart Dumper
+""" pg_dumper
 
-This program takes in a formatted EON extract of SBD's Redshift Table DDLs and generates crt_ models that can be placed
-in the dbt project. The purpose of crt_ models is to simply create the tables in the warehouse so that they exist when
+This program takes in a formatted EON extract of SBD's Redshift Table DDLs
+ and generates crt_ models that can be placed
+in the dbt project. The purpose of crt_ models is to simply create the tables
+ in the warehouse so that they exist when
 converting the Redshift stored procedures.
 
-Note: Any table that already exists won't be create and any table that is created by a dbt model will be overwritten.
+Note: Any table that already exists won't be create and any table that is created
+ by a dbt model will be overwritten.
 Note: Convert the .sql file to a .txt file by changing the extension before running the script.
 
 Future Updates:

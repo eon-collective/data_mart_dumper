@@ -14,8 +14,23 @@
 
 </p>
 
-# Welcome to Eon Collective pg_dump Processor </i>
+## Building this project
+### Docker image
+1. From project root,
+   
+   run `docker build --tag pg_dumper:latest .`
 
+2. List images
+
+    run `docker images` to validate docker image exists with name <i>pg_dumper</i> with the latest tag
+
+3. To test running the image, 
+    `docker run pg_dumper:latest --version`
+    `docker run pg_dumper:latest --help`
+    `docker run pg_dumper:latest --input_file_name </path/to/file> --output_location </path/to/output/directory>`
+
+
+## Developing this project
 ### Creating a virtual environment in the terminal 
 #### macOS/Linux
 ##### You may need to run `sudo apt-get install python3-venv` first on Debian-based OSs
