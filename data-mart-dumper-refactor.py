@@ -16,6 +16,7 @@ Future Updates:
 import re
 import os
 import regex
+import argparse
 
 WRITE_LOCATION = os.getcwd()
 TXT_FILE_LOCATION = ''
@@ -97,4 +98,10 @@ def quote_swap(string: str, swap_out='double') -> str:
         return string.replace("'", '"')
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+                    prog='Data Mart Dumper',
+                    description='''This program takes in a formatted EON extract of SBD\'s Redshift Table DDLs and generates crt_ models that can be placed
+                                in the dbt project. The purpose of crt_ models is to simply create the tables in the warehouse so that they exist when
+                                converting the Redshift stored procedures.''',
+                    epilog='ADEPT utilities')
     main()
