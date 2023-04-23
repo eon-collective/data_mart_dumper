@@ -1,4 +1,20 @@
-# ADEPT <i> data_mart_dumper <i/>
+# dbt_practices
+
+<img src="https://static.wixstatic.com/media/95af51_ae2122aebc944721a96afd10f3ccfe0c~mv2.png/v1/fill/w_329,h_45,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/95af51_ae2122aebc944721a96afd10f3ccfe0c~mv2.png" alt="drawing" width="200"/><a name="top-">
+
+<p align="center">
+
+[![Pylint](https://github.com/eon-collective/data_mart_dumper/actions/workflows/pylint.yml/badge.svg)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/pylint.yml)
+
+</p>
+
+<p align="center">
+
+[![Python application](https://github.com/eon-collective/data_mart_dumper/actions/workflows/python-app.yml/badge.svg)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/python-app.yml)
+
+</p>
+
+# Welcome to Eon Collective pg_dump Processor </i>
 
 ### Creating a virtual environment in the terminal 
 #### macOS/Linux
