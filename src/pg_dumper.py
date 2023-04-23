@@ -18,22 +18,22 @@ import os
 import regex
 import argparse
 
-WRITE_LOCATION = os.getcwd()
-TXT_FILE_LOCATION = ''
+# WRITE_LOCATION = os.getcwd()
+# TXT_FILE_LOCATION = ''
 
-# Change this to where you want the files to be dumped, otherise they will be dumped in the current working directory
-WRITE_LOCATION = r''
+# # Change this to where you want the files to be dumped, otherise they will be dumped in the current working directory
+# WRITE_LOCATION = r''
 
 # CREATE_TABLE_REGEX = ''
 # FIND_TABLE_NAME_REGEX = ''
 
 
-def main():
+def process_pg_dump_file(input_file_location, output_file_location):
     create_table_regex = regex.compile(
-        r'CREATE (?!EXTERNAL).*TABLE\s(IF NOT EXISTS)?(?:\w|\s|\.|\n|\(|,|(?<=\d)\)|-|\+|\[|\]|\"|(?<=\w)\))+\)'
+        r'CREATE (?!EXTERNAL|TEMP).*TABLE\s(IF NOT EXISTS)?(?:\w|\s|\.|\n|\(|,|(?<=\d)\)|-|\+|\[|\]|\"|(?<=\w)\))+\)'
     )
 
-    with open(TXT_FILE_LOCATION, 'r') as f:
+    with open(input_file_location, 'r') as f:
         buffer = ''
         for line in f:
             buffer += line
@@ -46,7 +46,7 @@ def main():
                     table_ddl = quote_swap(table_ddl_search.group())
                     schema_name, table_name = extract_table_header_from_statement(table_ddl)
                     print(schema_name, table_name, table_ddl)
-                    write_ddl_to_file(schema_name, table_name, table_ddl)
+                    write_ddl_to_file(output_file_location,schema_name, table_name, table_ddl)
                 else:
                     continue
 
@@ -69,7 +69,7 @@ def extract_table_header_from_statement(ddl_statement: str) -> tuple:
         return None, None
 
 
-def write_ddl_to_file(schema_name: str, table_name: str, ddl_statement: str):
+def write_ddl_to_file(output_file_location: str, schema_name: str, table_name: str, ddl_statement: str):
     file_body = '{{% set table_metadata = {{ \n\t ' \
                 '"table_definition":" \n\t\t' \
                 '{} \n\t' \
@@ -84,7 +84,8 @@ def write_ddl_to_file(schema_name: str, table_name: str, ddl_statement: str):
         file_name = f'crt__{table_name.strip()}.sql'
 
     print(f'Writing {file_name}')
-    os.chdir(WRITE_LOCATION)
+    # os.chdir(WRITE_LOCATION)
+    os.chdir(output_file_location)
     file = open(file_name, 'w')
     file.write(file_body)
     file.close()
@@ -100,8 +101,20 @@ def quote_swap(string: str, swap_out='double') -> str:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
                     prog='Data Mart Dumper',
-                    description='''This program takes in a formatted EON extract of SBD\'s Redshift Table DDLs and generates crt_ models that can be placed
+                    description='''This program takes in a pg_dump generated DDLs and generates crt_ models that can be placed
                                 in the dbt project. The purpose of crt_ models is to simply create the tables in the warehouse so that they exist when
                                 converting the Redshift stored procedures.''',
                     epilog='ADEPT utilities')
-    main()
+    parser.add_argument('--input_file_name',
+                    default='/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/gp_ns_ddl_test-schema-eon-assessment.sql',
+                    help='Input location for the pg_dump file')
+    parser.add_argument('--output_location',
+                        default='/Users/james.kimani/Development/repositories/data_mart_dumper/out',
+                        help='Output location of generated files')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+
+    args = parser.parse_args()
+    print("Provided pg_dump file: " + args.input_file_name)
+    print("Provided output location: " + args.output_location)
+    ## call the process_pg_dump_file with input and put locations from args
+    process_pg_dump_file(args.input_file_name, args.output_location) 
