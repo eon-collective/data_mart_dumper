@@ -39,7 +39,7 @@ def process_pg_dump_file(input_file_location, output_file_location):
     output_file_location -- Output folder location
     """
     create_table_regex = regex.compile(
-        r'CREATE (?!EXTERNAL|TEMP).*TABLE\s(IF NOT EXISTS)?(?:\w|\s|\.|\n|\(|,|(?<=\d)\)|-|\+|\[|\]|\"|(?<=\w)\))+\)'
+        r'CREATE (?!EXTERNAL| TEMP).*TABLE\s(IF NOT EXISTS)?(?:\w|\s|\.|\n|\(|,|(?<=\d)\)|-|\+|\[|\]|\"|(?<=\w)\))+\)'
     )
 
     with open(input_file_location, 'r') as file_content:

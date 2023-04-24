@@ -38,7 +38,6 @@
 
     `docker run pg_dumper:latest --input_file_name </path/to/file> --output_location </path/to/output/directory>`
 
-
 ## Developing this project
 ### Creating a virtual environment in the terminal 
 #### macOS/Linux
