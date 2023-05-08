@@ -1,3 +1,4 @@
 ### ignore python virtual environment folders
 .*venv
 __pycache__/
+.pytest_cache/

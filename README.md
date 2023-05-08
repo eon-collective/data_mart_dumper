@@ -38,6 +38,19 @@
 
     `docker run pg_dumper:latest --input_file_name </path/to/file> --output_location </path/to/output/directory>`
 
+4. To tag and push image to ECR/ Hub etc
+
+```
+export IMAGE_TAG=0.8.0
+docker build --tag adept_pg_dump_assessor:$IMAGE_TAG .
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 745001225527.dkr.ecr.us-east-1.amazonaws.com
+docker tag adept_pg_dump_assessor:$IMAGE_TAG 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:latest
+docker tag adept_pg_dump_assessor:$IMAGE_TAG 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:$IMAGE_TAG
+docker push 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:$IMAGE_TAG
+docker push 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:latest
+docker images
+```
+
 ## Developing this project
 ### Creating a virtual environment in the terminal 
 #### macOS/Linux
