@@ -51,6 +51,14 @@ docker push 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:
 docker images
 ```
 
+### To run this application with docker
+
+```
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 745001225527.dkr.ecr.us-east-1.amazonaws.com
+
+docker run 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:latest --help
+```
+
 ## Developing this project
 ### Creating a virtual environment in the terminal 
 #### macOS/Linux

@@ -1,5 +1,5 @@
 from re import S
-from src.pg_dumper import quote_swap
+from src.pg_dump.pg_dumper import quote_swap
 
 def test_quote_swap_double():
     """Test that a swap happens correctly when provided a string

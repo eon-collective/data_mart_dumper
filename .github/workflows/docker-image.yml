@@ -9,7 +9,6 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -22,9 +21,15 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Check python version
       run: python --version
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag pg_dumper:ci_build-$(git log --pretty=format:'%h' -n 1)
+    - name: adept_pg_dump_assessor -Build Docker image
+      run: docker build . --file src/adept_pg_dump_assessor/Dockerfile --tag adept_pg_dump_assessorer:ci_build-$(git log --pretty=format:'%h' -n 1)
     - name: List the available Docker images
       run: docker images
     - name: run the Docker image - show help
-      run: docker run pg_dumper:ci_build-$(git log --pretty=format:'%h' -n 1) --help
+      run: docker run adept_pg_dump_assessorer:ci_build-$(git log --pretty=format:'%h' -n 1) --help
+  deployment: 
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: deploy
+        run: docker build . --file src/adept_pg_dump_assessor/Dockerfile --tag adept_pg_dump_assessorer:ci_build-$(git log --pretty=format:'%h' -n 1)
