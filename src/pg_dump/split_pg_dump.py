@@ -7,12 +7,13 @@ from ydata_profiling import ProfileReport
 
 # delimiter = '-- Name: '
 
-counter = 1
-output_filename = 'part-'+str(counter)
-section = 'audit'
 output_path=''
 
 def split_file_from_pg_dump(args):
+    counter = 1
+    output_filename = 'part-'+str(counter)
+    section = 'audit'
+
     """
     split_file_from_pg_dump - Split File From pg_dump File
     
@@ -109,7 +110,7 @@ if __name__ == '__main__':
     epilog='ADEPT utilities')
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     parser.add_argument("-i", "--input-file", required=False, help="input txt", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/gp_ns_ddl_test-schema-eon-assessment.sql")
-    parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/splits")
+    parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/splits/")
     parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="profiling.yml")
     parser.add_argument("-s", "--split-delimiter", required=False, help="pg_dump file split delimiter", default="-- Name: ")
     main(parser)
