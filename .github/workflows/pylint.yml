@@ -19,10 +19,10 @@ jobs:
         python -m pip install --upgrade pip -r requirements.txt
     - name: Test with python call for Version
       run: |
-        python src/pg_dumper.py --version
+        python src/pg_dump/split_pg_dump.py --version
     - name: Test with python call for Help
       run: |
-        python src/pg_dumper.py --help  
+        python src/pg_dump/split_pg_dump.py --help  
     - name: Analysing the code with pylint
       run: |
         pwd

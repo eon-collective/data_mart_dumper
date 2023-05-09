@@ -55,7 +55,7 @@ def split_file_from_pg_dump(args):
 
                     stats_output_path = os.path.join(args.output_dir, 'catalog.csv')
                     with open(stats_output_path, 'a') as stats_output_file:
-                        cleanLine = line.replace("-- Name: ","").replace(" Type: ","").replace(" Schema: ","").replace(" Owner: ","").replace(" Tablespace: ","")
+                        cleanLine = line.replace("-- Name: ","").replace(" Type: ","").replace(" Schema: ","").replace(" Owner: ","").replace("; Tablespace: ","")
                         stats_output_file.write("{0}\n".format(cleanLine))
                     print(section + ' Section '+str(counter)+' started and write to file '+ output_filename)
                 else:
@@ -79,7 +79,9 @@ def profile_adept_results(args):
 
     """
     try:
-        df = pandas.read_csv(args.input_file,
+        stats_output_path = args.output_dir +'/catalog.csv'
+        print (stats_output_path)
+        df = pandas.read_csv(stats_output_path,
                                 sep = ';',
                                 engine='python')
         prof = ProfileReport(df,

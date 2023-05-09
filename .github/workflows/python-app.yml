@@ -31,10 +31,10 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Python call for pg_dumper with version
       run: |
-        python src/pg_dumper.py --version
+        python src/pg_dump/split_pg_dump.py --version
     - name: Python call for pg_dumper with help
       run: |
-        python src/pg_dumper.py --help
+        python src/pg_dump/split_pg_dump.py --help
     - name: Test with pytest
       run: |
         pytest
