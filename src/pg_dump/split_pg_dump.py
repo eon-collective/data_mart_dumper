@@ -7,21 +7,9 @@ from ydata_profiling import ProfileReport
 
 # delimiter = '-- Name: '
 
-parser = argparse.ArgumentParser(
-    prog='pg_dump Splitter',
-    description='''This program takes in a pg_dump generated DDLs and generates individual 
-            .sql files partitioned by object type: TABLES, VIEWS etc.''',
-    epilog='ADEPT utilities')
-parser.add_argument('--version', action='version', version='%(prog)s 1.0')
-parser.add_argument("-i", "--input-file", required=False, help="input txt", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/gp_ns_ddl_test-schema-eon-assessment.sql")
-parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/splits")
-parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="profiling.yml")
-parser.add_argument("-s", "--split-delimiter", required=False, help="pg_dump file split delimiter", default="-- Name: ")
-
-
 counter = 1
 output_filename = 'part-'+str(counter)
-section = 'SCHEMA'
+section = 'audit'
 output_path=''
 
 def split_file_from_pg_dump(args):
@@ -30,16 +18,19 @@ def split_file_from_pg_dump(args):
     
     """
     try:
-        stats_output_path = os.path.join(args.output_dir, 'catalog.csv')
+        stats_output_dir = os.path.join(args.output_dir, 'audit')
+        stats_output_path = os.path.join(stats_output_dir, 'catalog.csv')
         ## check if file exists
         catalogFile_isExist = os.path.exists(stats_output_path)
         if not catalogFile_isExist:
+            os.makedirs(stats_output_dir)
+            print("The new directory is created for audit stats! ")
             with open(stats_output_path, 'a') as stats_output_file:
                 stats_output_file.write("{0};{1};{2};{3}\n".format("Name", "Type", "Schema", "Owner"))
 
         with open(args.input_file, 'r') as input_file:
             for line in input_file.read().split('\n'):
-                if args.split_delim in line:
+                if args.split_delimiter in line:
                     counter = counter+1
                     # -- Name: TABLE ada_phone_agg_touch_fct; Type: ACL; Schema: mkt_rdl; Owner: sys_object_owner
                     file_parts = line.removeprefix('-- ').split('; ')
@@ -97,7 +88,7 @@ def profile_adept_results(args):
         print ("something went wrong in profile_adept_results")
         raise
 
-def main():
+def main(parser):
     """
     main - Driver program
     
@@ -109,3 +100,16 @@ def main():
     except:
         print ("something went wrong in calling main driver for the program")
         raise
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+    prog='pg_dump Splitter',
+    description='''This program takes in a pg_dump generated DDLs and generates individual 
+            .sql files partitioned by object type: TABLES, VIEWS etc.''',
+    epilog='ADEPT utilities')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+    parser.add_argument("-i", "--input-file", required=False, help="input txt", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/gp_ns_ddl_test-schema-eon-assessment.sql")
+    parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/splits")
+    parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="profiling.yml")
+    parser.add_argument("-s", "--split-delimiter", required=False, help="pg_dump file split delimiter", default="-- Name: ")
+    main(parser)

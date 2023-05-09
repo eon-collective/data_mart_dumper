@@ -9,5 +9,4 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-# ENTRYPOINT ["python3", "src/pg_dumper.py"]
 ENTRYPOINT ["python3", "split_pg_dump.py"]
