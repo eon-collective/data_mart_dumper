@@ -1,4 +1,4 @@
-name: Pylint
+name: pylint-all-packages.yml
 
 on: [push]
 

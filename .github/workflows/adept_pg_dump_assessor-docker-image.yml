@@ -1,4 +1,4 @@
-name: adept_pg_dump_assessor- Build Docker image
+name: adept_pg_dump_assessor-Build Docker image
 
 on:
   push:

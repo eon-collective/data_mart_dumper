@@ -1,4 +1,4 @@
-name: adept_profiler- Build Docker image
+name: adept_profiler-Build Docker image
 
 on:
   push:
