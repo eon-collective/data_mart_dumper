@@ -1,0 +1,35 @@
+name: adept_profiler- Build Docker image
+
+on:
+  push:
+    branches: [ "main", "feature/*"]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Check python version
+      run: python --version
+    - name: adept_profiler -Build Docker image
+      run: docker build . --file src/pg_dump/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
+    - name: List the available Docker images
+      run: docker images
+    - name: run the Docker image - show help
+      run: docker run adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1) --help
+  deployment: 
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: deploy
+        run: docker build . --file src/pg_dump/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)

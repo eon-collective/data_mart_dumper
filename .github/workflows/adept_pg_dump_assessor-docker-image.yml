@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: adept_pg_dump_assessor- Build Docker image
 
 on:
   push:
@@ -22,14 +22,14 @@ jobs:
     - name: Check python version
       run: python --version
     - name: adept_pg_dump_assessor -Build Docker image
-      run: docker build . --file src/pg_dump/split_pg_dump.py/Dockerfile --tag adept_pg_dump_assessorer:ci_build-$(git log --pretty=format:'%h' -n 1)
+      run: docker build . --file src/pg_dump/Dockerfile --tag adept_pg_dump_assessor:ci_build-$(git log --pretty=format:'%h' -n 1)
     - name: List the available Docker images
       run: docker images
     - name: run the Docker image - show help
-      run: docker run adept_pg_dump_assessorer:ci_build-$(git log --pretty=format:'%h' -n 1) --help
+      run: docker run adept_pg_dump_assessor:ci_build-$(git log --pretty=format:'%h' -n 1) --help
   deployment: 
     runs-on: ubuntu-latest
     environment: production
     steps:
       - name: deploy
-        run: docker build . --file src/pg_dump/split_pg_dump.py/Dockerfile --tag adept_pg_dump_assessorer:ci_build-$(git log --pretty=format:'%h' -n 1)
+        run: docker build . --file src/pg_dump/Dockerfile --tag adept_pg_dump_assessor:ci_build-$(git log --pretty=format:'%h' -n 1)
