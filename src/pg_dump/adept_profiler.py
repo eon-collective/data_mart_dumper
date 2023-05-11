@@ -24,7 +24,7 @@ def profile_adept_from_folder(args):
             data['file'] = f.stem
             dfs.append(data)
 
-        print (stats_output_path)
+        print (dir_output_path)
         df = pandas.concat(dfs, ignore_index=True)
         prof = ProfileReport(df,
             config_file=args.conf_file)
