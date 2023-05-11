@@ -11,8 +11,8 @@ def profile_adept_from_folder(args):
     profile_adept_results from a folder
     """
     try:
-        stats_output_path = args.output_dir
-        ddl_files = Path(directory).glob('*.csv')
+        dir_output_path = args.output_dir
+        ddl_files = Path(dir_output_path).glob('*.csv')
         dfs = list()
         for f in ddl_files:
             # print("Checking out "+ str(f))
@@ -28,7 +28,7 @@ def profile_adept_from_folder(args):
         df = pandas.concat(dfs, ignore_index=True)
         prof = ProfileReport(df,
             config_file=args.conf_file)
-        prof.to_file(output_file=args.output_dir+'/report.html')
+        prof.to_file(output_file=args.output_dir+'/'+args.report_name)
     except:
         print ("something went wrong in profile_adept_results")
         raise
@@ -46,7 +46,7 @@ def profile_adept_from_file(args):
                                 engine='python')
         prof = ProfileReport(df,
             config_file=args.conf_file)
-        prof.to_file(output_file=args.output_dir+'/report.html')
+        prof.to_file(output_file=args.output_dir+'/'+args.report_name)
     except:
         print ("something went wrong in profile_adept_results")
         raise
@@ -76,5 +76,7 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--input-file", required=False, help="input txt", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/gp_ns_ddl_test-schema-eon-assessment.sql")
     parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/splits/")
     parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="profiling.yml")
+    parser.add_argument("-r", "--report-name", required=False, help="profiling report name", default="report.html")
     parser.add_argument("-m", "--mode", required=False, help="choose mode to run this jobs as: can be file or folder", choices=['file','folder', 'FILE', 'FOLDER'], default="FILE")
+
     main(parser)
