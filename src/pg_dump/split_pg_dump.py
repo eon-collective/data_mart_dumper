@@ -11,20 +11,21 @@ output_path=''
 
 def split_file_from_pg_dump(args):
     counter = 1
-    output_filename = 'part-'+str(counter)
-    section = 'audit'
+    output_filename = 'database-header-'+str(counter)
+    section = 'DATABASE'
 
     """
     split_file_from_pg_dump - Split File From pg_dump File
     
     """
+    output_dir = os.path.join(args.output_dir, 'catalog')
     try:
-        stats_output_dir = os.path.join(args.output_dir, 'audit')
-        stats_output_path = os.path.join(stats_output_dir, 'catalog.csv')
+        # output_dir = os.path.join(args.output_dir, 'catalog')
+        stats_output_path = os.path.join(output_dir, 'catalog.csv')
         ## check if file exists
         catalogFile_isExist = os.path.exists(stats_output_path)
         if not catalogFile_isExist:
-            os.makedirs(stats_output_dir)
+            os.makedirs(output_dir)
             print("The new directory is created for audit stats! ")
             with open(stats_output_path, 'a') as stats_output_file:
                 stats_output_file.write("{0};{1};{2};{3}\n".format("Name", "Type", "Schema", "Owner"))
@@ -44,16 +45,16 @@ def split_file_from_pg_dump(args):
 
                     # output_filename = 'gp-part-'+str(counter)
                     output_filename = object_schema+"-"+object_name+"-"+object_owner
-                    output_path = os.path.join(args.output_dir+section, output_filename+'.sql')
-                    object_directory_isExist = os.path.exists(args.output_dir+section)
+                    output_path = os.path.join(output_dir+"/"+section, output_filename+'.sql')
+                    object_directory_isExist = os.path.exists(output_dir+"/"+section)
                     if not object_directory_isExist:
                         # Create a new directory because it does not exist
-                        os.makedirs(args.output_dir+section)
-                        print("The new directory is created! "+ args.output_dir+section)
+                        os.makedirs(output_dir+"/"+section)
+                        print("The new directory is created! "+ args.output_dir+"/"+section)
                     with open(output_path, 'a') as output_file:
                         output_file.write("{0}\n".format(line))
 
-                    stats_output_path = os.path.join(args.output_dir, 'catalog.csv')
+                    # stats_output_path = os.path.join(args.output_dir, 'catalog.csv')
                     with open(stats_output_path, 'a') as stats_output_file:
                         cleanLine = line.replace("-- Name: ","").replace(" Type: ","").replace(" Schema: ","").replace(" Owner: ","").replace("; Tablespace: ","")
                         stats_output_file.write("{0}\n".format(cleanLine))
@@ -61,12 +62,12 @@ def split_file_from_pg_dump(args):
                 else:
                     #skips empty lines (change the condition if you want empty lines too)
                     if line.strip() :
-                        output_path = os.path.join(args.output_dir+section, output_filename+'.sql')
-                        isExist = os.path.exists(args.output_dir+section)
+                        output_path = os.path.join(output_dir+"/"+section, output_filename+'.sql')
+                        isExist = os.path.exists(output_dir +"/"+section)
                         if not isExist:
                             # Create a new directory because it does not exist
-                            os.makedirs(args.output_dir+section)
-                            print("The new directory is created! "+ args.output_dir+section)
+                            os.makedirs(output_dir+"/"+section)
+                            print("The new directory is created! "+ args.output_dir+"/"+section)
                         with open(output_path, 'a') as output_file:
                             output_file.write("{0}\n".format(line))
     except:
@@ -79,14 +80,15 @@ def profile_adept_results(args):
 
     """
     try:
-        stats_output_path = args.output_dir +'/catalog.csv'
+        output_dir = os.path.join(args.output_dir, 'catalog')
+        stats_output_path = output_dir +'/catalog.csv'
         print (stats_output_path)
         df = pandas.read_csv(stats_output_path,
                                 sep = ';',
                                 engine='python')
         prof = ProfileReport(df,
             config_file=args.conf_file)
-        prof.to_file(output_file=args.output_dir+'/report.html')
+        prof.to_file(output_file=output_dir+'/catalog_report.html')
     except:
         print ("something went wrong in profile_adept_results")
         raise
@@ -113,6 +115,6 @@ if __name__ == '__main__':
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     parser.add_argument("-i", "--input-file", required=False, help="input txt", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/gp_ns_ddl_test-schema-eon-assessment.sql")
     parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="/Users/james.kimani/Development/repositories/greenplum-oss-docker/usecase2/data/splits/")
-    parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="profiling.yml")
+    parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="/Users/james.kimani/Development/repositories/data_mart_dumper/src/pg_dump/profiling.yml")
     parser.add_argument("-s", "--split-delimiter", required=False, help="pg_dump file split delimiter", default="-- Name: ")
     main(parser)

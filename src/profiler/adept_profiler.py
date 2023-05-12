@@ -17,7 +17,7 @@ def profile_adept_from_folder(args):
         for f in ddl_files:
             # print("Checking out "+ str(f))
             data = pandas.read_csv(f,
-                                sep = ';', 
+                                sep = ',', 
                                 engine='python')
             # data = pandas.read_fwf(f)
             # .stem is method for pathlib objects to get the filename w/o the extension
@@ -42,7 +42,7 @@ def profile_adept_from_file(args):
         stats_output_path = args.output_dir
         print (stats_output_path)
         df = pandas.read_csv(stats_output_path,
-                                sep = ';',
+                                sep = args.delimiter,
                                 engine='python')
         prof = ProfileReport(df,
             config_file=args.conf_file)
@@ -74,6 +74,7 @@ if __name__ == '__main__':
     epilog='ADEPT utilities')
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     parser.add_argument("-i", "--input-file", required=False, help="input txt", default="")
+    parser.add_argument("-d", "--delimiter", required=False, help="delimiter for input file", type=ascii)
     parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="")
     parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="profiling.yml")
     parser.add_argument("-r", "--report-name", required=False, help="profiling report name", default="report.html")
