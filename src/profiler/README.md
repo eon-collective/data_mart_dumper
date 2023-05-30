@@ -38,6 +38,7 @@
 
     `docker run adept_profiler:latest --input_file_name </path/to/file> --output_location </path/to/output/directory>`
 
+
 4. To tag and push image to ECR/ Hub etc
 
 ```
@@ -53,7 +54,7 @@ docker images
 ### To run this application with python
 
 ```
-python3 run 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:latest --help
+python3 run --input_file_name </path/to/file> --output_location </path/to/output/directory>
 ```
 
 ### To run this application with docker
