@@ -10,9 +10,11 @@ def profile_adept_from_folder(args):
     """
     profile_adept_results from a folder
     """
+    #os.system('pwd')
+    #os.system('ls -l')
     try:
-        dir_output_path = args.output_dir
-        ddl_files = Path(dir_output_path).glob('*.csv')
+        dir_input_path = args.input_dir
+        ddl_files = Path(dir_input_path).glob('*.csv')
         dfs = list()
         for f in ddl_files:
             # print("Checking out "+ str(f))
@@ -24,7 +26,7 @@ def profile_adept_from_folder(args):
             data['file'] = f.stem
             dfs.append(data)
 
-        print (dir_output_path)
+        print (args.output_dir)
         df = pandas.concat(dfs, ignore_index=True)
         prof = ProfileReport(df,
             config_file=args.conf_file)
@@ -39,9 +41,9 @@ def profile_adept_from_file(args):
 
     """
     try:
-        stats_output_path = args.output_dir
-        print (stats_output_path)
-        df = pandas.read_csv(stats_output_path,
+        stats_input_path = args.input_file
+        print (stats_input_path)
+        df = pandas.read_csv(stats_input_path,
                                 sep = args.delimiter,
                                 engine='python')
         prof = ProfileReport(df,
@@ -74,6 +76,7 @@ if __name__ == '__main__':
     epilog='ADEPT utilities')
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     parser.add_argument("-i", "--input-file", required=False, help="input txt", default="")
+    parser.add_argument("-f", "--input-dir", required=False, help="input dir", default="")
     parser.add_argument("-d", "--delimiter", required=False, help="delimiter for input file", type=ascii)
     parser.add_argument("-o", "--output-dir", required=False, help="output directory", default="")
     parser.add_argument("-c", "--conf-file", required=False, help="Profiling configuration file", default="profiling.yml")
