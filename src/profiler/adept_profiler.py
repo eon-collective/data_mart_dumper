@@ -46,9 +46,11 @@ def profile_adept_from_file(args):
         df = pandas.read_csv(stats_input_path,
                                 sep = args.delimiter,
                                 engine='python')
+            
         prof = ProfileReport(df,
             config_file=args.conf_file)
         prof.to_file(output_file=args.output_dir+'/'+args.report_name)
+        print ("Writing profile report to "+ args.output_dir+'/'+args.report_name)
     except:
         print ("something went wrong in profile_adept_results")
         raise
