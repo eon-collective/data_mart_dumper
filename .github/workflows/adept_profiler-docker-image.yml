@@ -27,9 +27,3 @@ jobs:
       run: docker images
     - name: run the Docker image - show help
       run: docker run adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1) --help
-  deployment: 
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: deploy
-        run: ls -ltr && cd src/profiler && docker build . --file src/profiler/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
