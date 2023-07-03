@@ -22,7 +22,7 @@ jobs:
     - name: Check python version
       run: python --version
     - name: adept_profiler -Build Docker image
-      run: docker build . --file src/profiler/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
+      run: cd src/profiler && docker build . --file Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
     - name: List the available Docker images
       run: docker images
     - name: run the Docker image - show help
@@ -32,4 +32,4 @@ jobs:
     environment: production
     steps:
       - name: deploy
-        run: docker build . --file src/pg_dump/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
+        run: cd src/profiler && docker build . --file src/profiler/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
