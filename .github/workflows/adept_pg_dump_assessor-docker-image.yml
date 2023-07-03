@@ -32,4 +32,4 @@ jobs:
     environment: production
     steps:
       - name: deploy
-        run: cd src/pg_dump && docker build . --file Dockerfile --tag adept_pg_dump_assessor:ci_build-$(git log --pretty=format:'%h' -n 1)
+        run: ls -ltr && docker build . --file Dockerfile --tag adept_pg_dump_assessor:ci_build-$(git log --pretty=format:'%h' -n 1)

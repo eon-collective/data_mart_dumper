@@ -32,4 +32,4 @@ jobs:
     environment: production
     steps:
       - name: deploy
-        run: cd src/profiler && docker build . --file src/profiler/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
+        run: ls -ltr && cd src/profiler && docker build . --file src/profiler/Dockerfile --tag adept_profiler:ci_build-$(git log --pretty=format:'%h' -n 1)
