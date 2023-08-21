@@ -60,9 +60,16 @@ python3 run --input_file_name </path/to/file> --output_location </path/to/output
 ### To run this application with docker
 
 ```
+Tag the image and push to repo
+export IMAGE_TAG=0.0.2
+echo $IMAGE_TAG
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 745001225527.dkr.ecr.us-east-1.amazonaws.com
-
-docker run 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_pg_dump_assessor:latest --help
+cd src/profiler && docker build . --file Dockerfile --tag adept_profiler:latest --tag adept_profiler:$IMAGE_TAG
+docker tag adept_profiler:$IMAGE_TAG 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_profiler:latest
+docker tag adept_profiler:$IMAGE_TAG 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_profiler:$IMAGE_TAG
+docker push 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_profiler:latest
+docker push 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_profiler:$IMAGE_TAG
+docker run 745001225527.dkr.ecr.us-east-1.amazonaws.com/adept_profiler:latest --help
 ```
 
 ## Developing this project
