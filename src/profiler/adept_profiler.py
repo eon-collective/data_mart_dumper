@@ -200,7 +200,7 @@ if __name__ == '__main__':
     prog='adept_profiler',
     description='''This program is used to profile a file or folder and provide a .html report''',
     epilog='ADEPT utilities')
-    parser.add_argument('--version', action='version', version='%(prog)s 2.0')
+    parser.add_argument('--version', action='version', version='%(prog)s 2.01')
     parser.add_argument("-i", "--input-file", required=False, help="input txt", default="")
     parser.add_argument("-f", "--input-dir", required=False, help="input dir", default="")
     parser.add_argument("-d", "--delimiter", required=False, help="delimiter for input file", type=ascii)
