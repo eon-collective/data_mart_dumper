@@ -5,6 +5,8 @@ import re
 import pandas
 from ydata_profiling import ProfileReport
 from pathlib import Path
+import hashlib
+from datetime import datetime
 
 def profile_adept_from_folder(args):
     """
@@ -22,7 +24,7 @@ def profile_adept_from_folder(args):
                                 sep = ',', 
                                 engine='python')
             # data = pandas.read_fwf(f)
-            # .stem is method for pathlib objects to get the filename w/o the extension
+            # .stem is method for pathlib objects to get the input_file w/o the extension
             data['profiled_file_name'] = f.stem
             dfs.append(data)
 
@@ -56,7 +58,7 @@ def profile_adept_from_mixedfolder(args):
             #                     sep = ',', 
             #                     engine='python')
             # data = pandas.read_fwf(f)
-            # .stem is method for pathlib objects to get the filename w/o the extension
+            # .stem is method for pathlib objects to get the input_file w/o the extension
             # data['profiled_file_name'] = f.stem
             # dfs.append(data)
             print(f.stem)
@@ -64,6 +66,88 @@ def profile_adept_from_mixedfolder(args):
     except:
         print ("something went wrong in profile_adept_results during profile for a folder")
         raise
+
+def generate_adept_graph_data(input_file, output_dir, job_name, df):
+    file_name =  Path(input_file).name
+    file_extension = file_name.split(".")[1]
+
+    # check if graph data directory for nodes exists, if not create it
+    gd_nodes_directory=output_dir+'/'+job_name+'/graph_data/nodes'
+    gd_nodes_directory_isExist = os.path.exists(gd_nodes_directory)
+    if not gd_nodes_directory_isExist:
+        # Create a new directory because it does not exist for /graph_data/nodes
+        os.makedirs(gd_nodes_directory+"/")
+        print("The new directory is created! "+ gd_nodes_directory)
+
+    # check if graph data directory for nodes exists, if not create it
+    gd_relationships_directory=output_dir+'/'+job_name+'/graph_data/relationships'
+    gd_relationships_directory_isExist = os.path.exists(gd_relationships_directory)
+    if not gd_relationships_directory_isExist:
+        # Create a new directory because it does not exist for /graph_data/relationships
+        os.makedirs(gd_relationships_directory+"/")
+        print("The new directory is created! "+ gd_relationships_directory)
+
+    file_node_path = gd_nodes_directory+"/profile_file.csv"
+    is_NodeFile_Existing = os.path.exists(file_node_path) 
+    if is_NodeFile_Existing == False:
+            BaseNodeFile = open(file_node_path, "a")
+            # Schema => Entity_ID:ID,:Label,HashKey,name, Technical Data Type,
+            file_column_header_line = ["Entity_ID:ID,:Label,HashKey,name,Path,Extension,Size,Last_Modified_Time,Creation_Time\n"]
+            BaseNodeFile.writelines(file_column_header_line)
+            file_column_line = ["%s,%s,%s,%s,%s,%s,%s bytes,%s,%s\n"%(hashlib.md5((input_file).encode()).hexdigest(),"File",hashlib.md5((input_file).encode()).hexdigest(),file_name,input_file,file_extension,os.path.getsize(input_file),os.path.getctime(input_file),os.path.getmtime(input_file))]
+            BaseNodeFile.writelines(file_column_line)
+            BaseNodeFile.close()
+    else:
+        BaseNodeFile = open(file_node_path, "a")
+        # Schema => Entity_ID:ID,:Label,HashKey,name,Path,Extension,Size,Creation_Time,Last_Modified_Time
+        file_column_line = ["%s,%s,%s,%s,%s,%s,%s bytes,%s,%s\n"%(hashlib.md5((input_file).encode()).hexdigest(),"File",hashlib.md5((input_file).encode()).hexdigest(),file_name,input_file,file_extension,os.path.getsize(input_file),os.path.getctime(input_file),os.path.getmtime(input_file))]
+        BaseNodeFile.writelines(file_column_line)
+        BaseNodeFile.close()
+            
+    filecolumn_node_path = gd_nodes_directory+"/profile_file_columns.csv"
+    is_NodeFile_Existing = os.path.exists(filecolumn_node_path) 
+    if is_NodeFile_Existing == False:
+        BaseNodeFile = open(filecolumn_node_path, "a")
+        # Schema => Entity_ID:ID,:Label,HashKey,name, Technical Data Type,
+        file_column_line = ["Entity_ID:ID,:Label,HashKey,name,Technical_Data_Type,Source_Name\n"]
+        BaseNodeFile.writelines(file_column_line)
+        BaseNodeFile.close()       
+    
+    file_relationship_path = gd_relationships_directory + "/profile_relationships.csv"
+    is_RelationshipFile_Existing = os.path.exists(file_relationship_path)
+    if is_RelationshipFile_Existing == False:
+        BaseRelationshipFile = open(file_relationship_path, "a")
+        # Schema => Entity_ID:ID,:Label,HashKey,name, Technical Data Type,
+        file_column_relationship_line = [":START_ID,:END_ID,:TYPE,timestamp,Version\n"]
+        BaseRelationshipFile.writelines(file_column_relationship_line)
+        BaseRelationshipFile.close()     
+
+    for colname, coltype in df.infer_objects().dtypes.items():       
+        print(colname, coltype)
+        NodeFileColumn = open(filecolumn_node_path, "a")
+        # Schema => Entity_ID:ID,:Label,HashKey,name, Technical Data Type,
+        Entity_ID = hashlib.md5((input_file+"~"+str(colname)).encode()).hexdigest()
+        Label = "Column"
+        HashKey = Entity_ID
+        name = str(colname)
+        Technical_Data_Type = str(coltype)
+        Source = input_file
+        file_column_line = [Entity_ID + "," + Label + "," + HashKey + "," + name + "," + Technical_Data_Type + "," + Source + "\n"]
+        NodeFileColumn.writelines(file_column_line)
+        NodeFileColumn.close()
+            
+        RelationshipFile = open(file_relationship_path, "a")
+        # Schema => :START_ID,:END_ID,:TYPE,timestamp,Version
+        START_ID = hashlib.md5((input_file).encode()).hexdigest()
+        END_ID = hashlib.md5((input_file+"~"+str(colname)).encode()).hexdigest()
+        TYPE = "contains_columns"
+        now = datetime.now()
+        timestamp = now.strftime("%Y%m%d%H%M%S")
+        Version = "1"
+        file_column_relationship_line = [START_ID + "," + END_ID + "," + TYPE + "," + timestamp + "," + Version + "\n"]
+        RelationshipFile.writelines(file_column_relationship_line)
+        RelationshipFile.close()
+
 
 def profile_adept_from_file(input_file, output_dir, job_name, report_name, conf_file, delimiter=','):
     """
@@ -76,8 +160,8 @@ def profile_adept_from_file(input_file, output_dir, job_name, report_name, conf_
         df = pandas.read_csv(stats_input_path,
                                 sep = delimiter,
                                 engine='python')
-            
-        df['profiled_file_name'] = Path(input_file).name
+        file_name =  Path(input_file).name  
+        df['profiled_file_name'] = file_name
         prof = ProfileReport(df,
             config_file=conf_file)
         object_directory_isExist = os.path.exists(output_dir+'/'+job_name+'/reports')
@@ -87,6 +171,9 @@ def profile_adept_from_file(input_file, output_dir, job_name, report_name, conf_
             print("The new directory is created! "+ output_dir+'/'+job_name+'/reports/')
         prof.to_file(output_file=output_dir+'/'+job_name+'/reports/'+report_name)
         print ("Writing profile report to "+ output_dir+'/'+job_name+'/reports/'+report_name)
+        #  generate graph_data for ADEPT
+        generate_adept_graph_data(input_file, output_dir, job_name, df)
+
     except:
         print ("something went wrong in profile_adept_results during profiling of a file")
         raise
@@ -113,7 +200,7 @@ if __name__ == '__main__':
     prog='adept_profiler',
     description='''This program is used to profile a file or folder and provide a .html report''',
     epilog='ADEPT utilities')
-    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+    parser.add_argument('--version', action='version', version='%(prog)s 2.0')
     parser.add_argument("-i", "--input-file", required=False, help="input txt", default="")
     parser.add_argument("-f", "--input-dir", required=False, help="input dir", default="")
     parser.add_argument("-d", "--delimiter", required=False, help="delimiter for input file", type=ascii)
