@@ -28,7 +28,7 @@
 
 2. List images
 
-    run `docker images` to validate docker image exists with name <i>adept_profiler</i> with the latest tag
+    run `docker images` to validate docker image exisgit ts with name <i>adept_profiler</i> with the latest tag
 
 3. To test running the image, 
 
