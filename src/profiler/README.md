@@ -24,7 +24,7 @@
 ### Docker image
 1. From project root,
    
-   run `docker build --tag adept_profiler:latest .`
+   run `docker build --tag adept_profiler:latest --tag adept_profiler:$(python3 adept_profiler.py --version | awk '($1 == "adept_profiler") {print $2 += .01; exit}') --tag $(git describe --abbrev=0 --tags) --tag $(git rev-parse --short HEAD) .`
 
 2. List images
 
@@ -61,7 +61,10 @@ python3 run --input_file_name </path/to/file> --output_location </path/to/output
 
 ```
 Tag the image and push to repo
-export IMAGE_TAG=0.0.2
+#export IMAGE_TAG=0.2.0
+#echo $IMAGE_TAG
+
+IMAGE_TAG=$(python3 adept_profiler.py --version | awk '($1 == "adept_profiler") {print $2 += .01; exit}')
 echo $IMAGE_TAG
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 745001225527.dkr.ecr.us-east-1.amazonaws.com
 cd src/profiler && docker build . --file Dockerfile --tag adept_profiler:latest --tag adept_profiler:$IMAGE_TAG
@@ -100,3 +103,5 @@ run `python -m pip list`
 
 ##### To save all of the packages installed in the virtual environment to a <i>requirements.txt</i>
 run `python -m pip freeze > requirements.txt`
+
+
