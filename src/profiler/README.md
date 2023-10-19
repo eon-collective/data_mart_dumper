@@ -19,6 +19,9 @@
 [![Docker Image CI](https://github.com/eon-collective/data_mart_dumper/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/eon-collective/data_mart_dumper/actions/workflows/docker-image.yml)
 
 </p>
+## Overview
+
+This application is used to profile individual csv files or an entire folder of csv files. 
 
 ## Building this project
 ### Docker image
